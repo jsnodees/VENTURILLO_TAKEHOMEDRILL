@@ -76,12 +76,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <h1>PHP Quiz</h1>
     <?php
-
     if (!isset($_SESSION['id'])); 
-
-    
-
     ?>
+
+    <form method="POST" action="">
+        <label for="id">Please Enter Your Student ID: </label>
+        <input type="text" id="id" name="id" required>
+        <input type="submit" name="Start Quiz" value="Start Quiz">
+    </form>
+
     
 
     <form method="post" action="">
