@@ -26,9 +26,9 @@ $questions = [
 // Initialize score
 $score = 0;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Start Quiz'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start_quiz'])) {
     $id = trim($_POST['id']);
-    if (!empty($name)) {
+    if (!empty($id)) {
         $_SESSION['id'] = htmlspecialchars($id);
     } else {
         $error = "Please Enter Your Student ID!";
@@ -36,9 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Start Quiz'])) {
 }
 
 // Check if form is submitted
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    foreach ($questions as $index => $question) {
-        if (isset($_POST["question$index"]) && $_POST["question$index"] == $question['answer']) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_quiz'])) {
+    if (isset($_SESSION['id'])) {
+        foreach ($questions as $index => $question) {
+            if (isset($_POST["question$index"]) && $_POST["question$index"] == $question['answer']) {
             $score++;
         }
     }
@@ -51,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mysqli_stmt_bind_param($stmt, "si", $username, $score);
         mysqli_stmt_execute($stmt);
 
-    if (mysqli_stmt_error($stmt)) {
+        if (mysqli_stmt_error($stmt)) {
         echo "Error saving score: " . mysqli_stmt_error($stmt);
     } else {
         echo "<h2>Your Score: $score/" . count($questions) . "</h2>";
@@ -63,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
         unset($_SESSION['id']);
         exit;
+}
 }
 ?>
 
@@ -76,16 +78,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <h1>PHP Quiz</h1>
     <?php
-    if (!isset($_SESSION['id'])); 
+    if (!isset($_SESSION['id'])): 
     ?>
 
-    <form method="POST" action="">
+    <form method="post" action="">
         <label for="id">Please Enter Your Student ID: </label>
         <input type="text" id="id" name="id" required>
-        <input type="submit" name="Start Quiz" value="Start Quiz">
+        <input type="submit" name="start _quiz" value="Start Quiz">
     </form>
-
-    
+    <?php
+    if (isset($error)): 
+    ?>
+        <p style="color: red;"><?php echo $error; ?> </p>
+    <?php endif; ?>
+    <?php else: ?>
 
     <form method="post" action="">
         <?php foreach ($questions as $index => $question): ?>
