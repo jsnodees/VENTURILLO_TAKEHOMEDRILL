@@ -27,9 +27,9 @@ $questions = [
 $score = 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Start Quiz'])) {
-    $name = trim($_POST['name']);
+    $id = trim($_POST['id']);
     if (!empty($name)) {
-        $_SESSION['name'] = htmlspecialchars($name);
+        $_SESSION['id'] = htmlspecialchars($id);
     } else {
         $error = "Please Enter Your Student ID!";
     }
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    $username = $_SESSION['name'];
+    $username = $_SESSION['id'];
     $query = "INSERT INTO quiz_results (student_id, score) VALUES (?, ?)";
     $stmt = mysqli_prepare($conn, $query);
 
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         echo "Error preparing query: " . mysqli_error($conn);
     }
-        unset($_SESSION['name']);
+        unset($_SESSION['id']);
         exit;
 }
 ?>
@@ -75,6 +75,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <h1>PHP Quiz</h1>
+    <?php
+
+    if (!isset($_SESSION['id'])); 
+
+    
+
+    ?>
+    
+
     <form method="post" action="">
         <?php foreach ($questions as $index => $question): ?>
             <fieldset>
