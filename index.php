@@ -42,9 +42,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $score++;
         }
     }
-    echo "<h2>Your Score: $score/" . count($questions) . "</h2>";
-    echo '<a href="index.php">Try Again</a>';
-    exit;
+
+    $username = $_SESSION['name'];
+    $query = "INSERT INTO quiz_results (student_id, score) VALUES (?, ?)";
+    $stmt = mysqli_prepare($conn, $query);
+
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "si", $username, $score);
+        mysqli_stmt_execute($stmt);
+
+    if (mysqli_stmt_error($stmt)) {
+        echo "Error saving score: " . mysqli_stmt_error($stmt);
+    } else {
+        echo "<h2>Your Score: $score/" . count($questions) . "</h2>";
+    echo '<a href="index.php">Try Again</a> | <a href="leaderboard.php"> View Leaderboard</a>';
+    }
+        mysqli_stmt_close($stmt);
+    } else {
+        echo "Error preparing query: " . mysqli_error($conn);
+    }
+        unset($_SESSION['name']);
+        exit;
 }
 ?>
 
