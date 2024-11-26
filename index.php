@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 include "connection.php";
 
 // Define questions and answers
@@ -28,8 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Start Quiz'])) {
     $name = trim($_POST['name']);
     if (!empty($name)) {
         $_SESSION['name'] = htmlspecialchars($name);
-    }
-    else {
+    } else {
         $error = "Please Enter Your Student ID!";
     }
 }
