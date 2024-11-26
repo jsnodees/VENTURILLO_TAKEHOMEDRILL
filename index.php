@@ -24,6 +24,16 @@ $questions = [
 // Initialize score
 $score = 0;
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Start Quiz'])) {
+    $name = trim($_POST['name']);
+    if (!empty($name)) {
+        $_SESSION['name'] = htmlspecialchars($name);
+    }
+    else {
+        $error = "Please Enter Your Student ID!";
+    }
+}
+
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($questions as $index => $question) {
