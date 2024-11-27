@@ -27,9 +27,9 @@ $questions = [
 $score = 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start_quiz'])) {
-    $id = trim($_POST['id']);
-    if (!empty($id)) {
-        $_SESSION['id'] = htmlspecialchars($id);
+    $name = trim($_POST['name']);
+    if (!empty($name)) {
+        $_SESSION['name'] = htmlspecialchars($name);
     } else {
         $error = "Please Enter Your Student ID!";
     }
@@ -37,14 +37,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start_quiz'])) {
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_quiz'])) {
-    if (isset($_SESSION['id'])) {
+    if (isset($_SESSION['name'])) {
         foreach ($questions as $index => $question) {
             if (isset($_POST["question$index"]) && $_POST["question$index"] == $question['answer']) {
             $score++;
         }
     }
 
-    $username = $_SESSION['id'];
+    $username = $_SESSION['name'];
     $query = "INSERT INTO quiz_results (student_id, score) VALUES (?, ?)";
     $stmt = mysqli_prepare($conn, $query);
 
@@ -62,9 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_quiz'])) {
     } else {
         echo "Error preparing query: " . mysqli_error($conn);
     }
-        unset($_SESSION['id']);
+        unset($_SESSION['name']);
         exit;
-}
+    }
 }
 ?>
 
@@ -73,39 +73,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_quiz'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP Quiz</title>
+    <title>Math Quiz</title>
 </head>
 <body>
     <h1>PHP Quiz</h1>
-    <?php
-    if (!isset($_SESSION['id'])): 
-    ?>
+    <?php if (!isset($_SESSION['name'])): ?>
 
     <form method="post" action="">
-        <label for="id">Please Enter Your Student ID: </label>
-        <input type="text" id="id" name="id" required>
-        <input type="submit" name="start _quiz" value="Start Quiz">
+        <label for="name">Please Enter Your Student ID: </label>
+        <input type="text" id="name" name="name" required>
+        <input type="submit" name="start_quiz" value="Start Quiz">
     </form>
-    <?php
-    if (isset($error)): 
-    ?>
+    <?php if (isset($error)): ?>
         <p style="color: red;"><?php echo $error; ?> </p>
     <?php endif; ?>
-    <?php else: ?>
+<?php else: ?>
 
     <form method="post" action="">
-        <?php foreach ($questions as $index => $question): ?>
-            <fieldset>
-                <legend><?php echo $question['question']; ?></legend>
-                <?php foreach ($question['options'] as $optionIndex => $option): ?>
-                    <label>
-                        <input type="radio" name="question<?php echo $index; ?>" value="<?php echo $optionIndex; ?>">
-                        <?php echo $option; ?>
-                    </label><br>
-                <?php endforeach; ?>
-            </fieldset>
-        <?php endforeach; ?>
-        <input type="submit" value="Submit">
+            <?php foreach ($questions as $index => $question): ?>
+                <fieldset>
+                    <legend><?php echo $question['question']; ?></legend>
+                    <?php foreach ($question['options'] as $optionIndex => $option): ?>
+                        <label>
+                            <input type="radio" name="question<?php echo $index; ?>" value="<?php echo $optionIndex; ?>">
+                            <?php echo $option; ?>
+                        </label><br>
+                    <?php endforeach; ?>
+                </fieldset>
+            <?php endforeach; ?>
+            <input type="submit" name="submit_quiz" value="Submit Quiz">
     </form>
+    <?php endif; ?>
 </body>
 </html>
