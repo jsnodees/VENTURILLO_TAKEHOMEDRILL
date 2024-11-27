@@ -4,7 +4,7 @@ include "connection.php";
 $query = "SELECT student_id, score FROM quiz_results ORDER BY score DESC";
 $result = mysqli_query($conn, $query);
 
-if (!result) {
+if (!$result) {
     die("Error fetching leaderboard data: " . mysqli_error($conn));
 }
 
@@ -37,7 +37,13 @@ $leaderboard = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         <td><?php echo htmlspecialchars($row['student_id']); ?></td>
                         <td><?php echo $row['score']; ?></td>
                     </tr>
+                    <?php endforeach; ?>
             </tbody>
         </table>
+    <?php else: ?>
+        <p>No scores to display.</p>
+    <?php endif; ?>
+
+    <a href="index.php"> Take a Quiz Again</a>
 </body>
 </html>
