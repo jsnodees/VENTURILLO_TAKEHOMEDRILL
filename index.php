@@ -7,6 +7,16 @@ include "connection.php";
 // Define questions and answers
 $questions = [
     [
+        "question" => "What is the correct way to end a PHP statement?",
+        "options" => [".", ";", ":", "}"],
+        "answer" => 1
+    ],
+    [
+        "question" => "Which function is used to output data in PHP?",
+        "options" => ["print()", "echo()", "printf()", "All of the above"],
+        "answer" => 1
+    ],
+    [
         "question" => "What does PHP stand for?",
         "options" => ["Personal Home Page", "Private Home Page", "PHP: Hypertext Preprocessor", "Public Hypertext Preprocessor"],
         "answer" => 2
